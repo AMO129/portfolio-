@@ -11,6 +11,7 @@ import { getPortfolioProfile } from "@/lib/portfolio-profile";
 import { getExperiences } from "@/lib/experiences";
 import { ExperienceTimeline } from "@/components/experience-timeline";
 import { AudioEntryGate } from "@/components/audio-entry-gate";
+import { AmbientSpaceBackdrop, SpaceQuoteBeacon } from "@/components/ambient-space";
 
 export const dynamic = "force-static";
 export const revalidate = 1800;
@@ -21,6 +22,8 @@ export default async function Home() {
   return (
     <AudioEntryGate><main className="relative min-h-screen overflow-hidden bg-[#0f0f0f] text-[#f2f3ee]">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_72%_10%,rgba(104,153,104,0.11),transparent_40%),linear-gradient(180deg,transparent_0%,rgba(7,9,8,0.55)_100%)]" />
+      <AmbientSpaceBackdrop />
+      <div className="relative z-10">
       <Header />
       <Hero tagline={profile.tagline} />
 
@@ -35,6 +38,7 @@ export default async function Home() {
             {[["01", "Systems thinking"], ["02", "Applied AI"], ["03", "Product design"]].map(([number, label]) => <div key={number} className="bg-[#111412] px-4 py-5"><span className="font-mono text-xs text-[#8cba85]">{number}</span><p className="mt-3 text-sm text-[#c7cbc5]">{label}</p></div>)}
           </div>
         </div>
+        <SpaceQuoteBeacon quote="System Maxim: Have fun, but don't allow fun have you." className="bottom-6 right-7 md:bottom-10 md:right-12" />
       </section>
 
       <section id="work" className="relative scroll-mt-24 border-y border-white/[0.07] bg-[#111312]/80 px-6 py-24 md:px-10 lg:px-14">
@@ -57,6 +61,7 @@ export default async function Home() {
       <Footer />
       <FloatingNavigation />
       <ScrollEffects />
+      </div>
     </main></AudioEntryGate>
   );
 }
