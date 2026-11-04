@@ -77,6 +77,7 @@ export async function POST(request: NextRequest) {
     ? aiResult.output.flatMap((item: { content?: unknown }) => Array.isArray(item.content) ? item.content : [])
       .find((item: { type?: unknown; text?: unknown }) => item.type === "output_text" && typeof item.text === "string")?.text as string | undefined
     : undefined;
+  if (!output) return NextResponse.json({ error: "AI returned an empty draft. Please try again." }, { status: 502 });
   let profile: { tagline?: unknown; summary?: unknown };
   try {
     profile = JSON.parse(output) as { tagline?: unknown; summary?: unknown };
