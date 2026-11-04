@@ -45,6 +45,18 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     <motion.article
       whileHover={{ y: -3 }}
       transition={{ duration: 0.2 }}
+      onHoverStart={() => {
+        if (safeUrl) setPreviewOpen(true);
+      }}
+      onHoverEnd={() => setPreviewOpen(false)}
+      onFocusCapture={() => {
+        if (safeUrl) setPreviewOpen(true);
+      }}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setPreviewOpen(false);
+        }
+      }}
       className="reveal-up group relative flex min-h-[310px] flex-col overflow-hidden bg-[#111412] p-6 sm:p-7"
     >
       <div className="flex items-start justify-between gap-4">
