@@ -25,8 +25,8 @@ export default async function Home() {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_72%_10%,color-mix(in_srgb,var(--accent)_9%,transparent),transparent_40%),linear-gradient(180deg,transparent_0%,color-mix(in_srgb,var(--canvas)_80%,transparent)_100%)]" />
       <AmbientSpaceBackdrop />
       <div className="relative z-10">
-      <Header />
-      <Hero tagline={profile.tagline} avatarUrl={profile.avatar_url} />
+      <Header avatarUrl={profile.avatar_url} />
+      <Hero tagline={profile.tagline} />
 
       <section id="about" className="relative mx-auto grid max-w-7xl scroll-mt-28 gap-10 px-6 py-28 md:grid-cols-[0.7fr_1.3fr] md:px-10 lg:px-14">
         <div className="reveal-up">
