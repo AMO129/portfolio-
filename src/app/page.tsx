@@ -7,18 +7,19 @@ import { ProjectsGrid } from "@/components/projects-grid";
 import { ScrollEffects } from "@/components/scroll-effects";
 import { SectionLabel } from "@/components/section-label";
 import { getProjects } from "@/lib/projects";
+import { getPortfolioProfile } from "@/lib/portfolio-profile";
 
 export const dynamic = "force-static";
 export const revalidate = 1800;
 
 export default async function Home() {
-  const projects = await getProjects();
+  const [projects, profile] = await Promise.all([getProjects(), getPortfolioProfile()]);
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#0f0f0f] text-[#f2f3ee]">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_72%_10%,rgba(104,153,104,0.11),transparent_40%),linear-gradient(180deg,transparent_0%,rgba(7,9,8,0.55)_100%)]" />
       <Header />
-      <Hero />
+      <Hero tagline={profile.tagline} />
 
       <section id="about" className="relative mx-auto grid max-w-7xl scroll-mt-28 gap-10 px-6 py-28 md:grid-cols-[0.7fr_1.3fr] md:px-10 lg:px-14">
         <div className="reveal-up">
@@ -26,8 +27,7 @@ export default async function Home() {
           <h2 className="mt-6 max-w-sm text-4xl font-medium leading-tight tracking-[-0.055em] sm:text-5xl">Built for systems that matter.</h2>
         </div>
         <div className="reveal-up max-w-3xl md:pt-12">
-          <p className="text-xl leading-9 text-[#b4b9b2] sm:text-2xl sm:leading-10">I’m Moses Owalama Abraham, a Software Engineering student at Pan-Atlantic University. I build practical web, desktop, and AI products with a focus on dependable engineering, thoughtful security, and clear interfaces.</p>
-          <p className="mt-6 max-w-2xl text-base leading-8 text-[#777f78]">My work spans computer-vision prototypes, machine-learning tools, cloud-connected desktop software, and transparent funding systems. Using Python, Next.js, and Supabase where they fit, I aim to build secure, resilient infrastructure with efficient code and interfaces that make complex systems feel clear.</p>
+          <p className="text-xl leading-9 text-[#b4b9b2] sm:text-2xl sm:leading-10">{profile.summary}</p>
           <div className="mt-10 grid grid-cols-2 gap-px border border-white/10 bg-white/10 sm:grid-cols-3">
             {[["01", "Systems thinking"], ["02", "Applied AI"], ["03", "Product design"]].map(([number, label]) => <div key={number} className="bg-[#111412] px-4 py-5"><span className="font-mono text-xs text-[#8cba85]">{number}</span><p className="mt-3 text-sm text-[#c7cbc5]">{label}</p></div>)}
           </div>
