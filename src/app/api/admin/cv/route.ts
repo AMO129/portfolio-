@@ -73,7 +73,10 @@ export async function POST(request: NextRequest) {
   }).catch(() => null);
   if (!aiResponse?.ok) return NextResponse.json({ error: "The CV was saved privately, but AI drafting failed. You can retry with the same PDF." }, { status: 502 });
   const aiResult = await aiResponse.json().catch(() => null);
-  const output = typeof aiResult?.output_text === "string" ? aiResult.output_text : "";
+  const output = Array.isArray(aiResult?.output)
+    ? aiResult.output.flatMap((item: { content?: unknown }) => Array.isArray(item.content) ? item.content : [])
+      .find((item: { type?: unknown; text?: unknown }) => item.type === "output_text" && typeof item.text === "string")?.text as string | undefined
+    : undefined;
   let profile: { tagline?: unknown; summary?: unknown };
   try {
     profile = JSON.parse(output) as { tagline?: unknown; summary?: unknown };
