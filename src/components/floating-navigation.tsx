@@ -1,0 +1,50 @@
+"use client";
+
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { ArrowUp, BriefcaseBusiness, Mail, UserRound, Radar } from "lucide-react";
+import { useState } from "react";
+
+const links = [
+  { label: "Top", href: "#top", icon: ArrowUp },
+  { label: "Profile", href: "#about", icon: UserRound },
+  { label: "Work", href: "#work", icon: BriefcaseBusiness },
+  { label: "Experience", href: "#experience", icon: Radar },
+  { label: "Contact", href: "#contact", icon: Mail },
+];
+
+export function FloatingNavigation() {
+  const [visible, setVisible] = useState(false);
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (position) => {
+    setVisible(position > 420);
+  });
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.nav
+          aria-label="Quick section navigation"
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 18 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          className="fixed bottom-4 left-1/2 z-40 flex max-w-[calc(100vw-1rem)] -translate-x-1/2 items-center gap-1 overflow-x-auto border border-white/10 bg-[#101311]/90 p-1.5 shadow-[0_12px_48px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:gap-2 sm:p-2"
+        >
+          {links.map(({ label, href, icon: Icon }) => (
+            <motion.a
+              key={href}
+              href={href}
+              whileHover={{ y: -2, color: "#c0dfb8", backgroundColor: "rgba(140,186,133,0.10)" }}
+              whileTap={{ scale: 0.96 }}
+              className="inline-flex min-h-10 shrink-0 items-center gap-2 px-2 font-mono text-[9px] uppercase tracking-[0.12em] text-[#aab2a9] focus-visible:outline focus-visible:outline-1 focus-visible:outline-[#8cba85] sm:px-4"
+            >
+              <Icon size={13} aria-hidden="true" />
+              <span>{label}</span>
+            </motion.a>
+          ))}
+        </motion.nav>
+      )}
+    </AnimatePresence>
+  );
+}

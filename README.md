@@ -12,9 +12,21 @@ Next.js App Router portfolio for Moses Owalama Abraham. The public portfolio rea
 
 The public portfolio is static and read-only. Set the Supabase URL and publishable key in the deployment build environment so the projects can be fetched during generation. Set `NEXT_PUBLIC_CONTACT_EMAIL` to `moses.abraham@pau.edu.ng` in the deployment environment. Never add a Supabase secret or service-role key to a `NEXT_PUBLIC_` variable.
 
+## CV-powered profile
+
+The hidden `/admin` console accepts a PDF CV (up to 10 MB), stores it in the private `private-cv-files` Supabase Storage bucket, and requests an AI-generated tagline and profile summary. The PDF is sent to the OpenAI Responses API only when an authorized admin asks for a draft; it is never exposed by the public site. The admin can edit the draft and must publish it explicitly. Only the tagline and summary are public. The website statically renders this profile and refreshes it within 30 minutes.
+
+Set `OPENAI_API_KEY` as a server-side environment variable in Render (never with a `NEXT_PUBLIC_` prefix). `OPENAI_MODEL` defaults to `gpt-6-luna` and can be changed there. The database migration is in `supabase/migrations/20261104085351_private_cv_and_portfolio_profile.sql`.
+
 ## Project table
 
 The public read expects `public.projects` with `id`, `created_at`, `title`, `status`, `role`, `tech_stack`, `description`, and nullable `project_url`. An empty project URL removes the external project link. The admin console supports create, update, and delete operations. These use the authenticated user's publishable-key client and depend on the existing RLS policies granting only the intended authenticated operator access.
+
+The CV/profile migration additionally restricts profile and private file operations to `moses.abraham@pau.edu.ng`.
+
+The public page also reads `public.experiences` (`id`, `role`, `organization`, `details`, `created_at`) as a static, read-only timeline with 30-minute revalidation. The admin console manages these records through authenticated requests; the experiences migration grants public read access and restricts writes to `moses.abraham@pau.edu.ng`.
+
+The entry gate expects an optional local sound file at `public/bg-audio.mp3`. Add your chosen audio asset there to enable background playback; the silent entry mode remains available.
 
 ## Styling and motion
 
