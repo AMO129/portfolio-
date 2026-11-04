@@ -8,9 +8,12 @@ const dateFormatter = new Intl.DateTimeFormat("en-GB", { timeZone: "Africa/Lagos
 export function LagosClock() {
   const [now, setNow] = useState<number | null>(null);
   useEffect(() => {
-    setNow(Date.now());
+    const initialTick = window.setTimeout(() => setNow(Date.now()), 0);
     const timer = window.setInterval(() => setNow(Date.now()), 47);
-    return () => window.clearInterval(timer);
+    return () => {
+      window.clearTimeout(initialTick);
+      window.clearInterval(timer);
+    };
   }, []);
   if (now === null) return <div className="h-[72px] w-[224px] border border-white/10 bg-[#111512]/75" aria-label="Nigeria local time loading" />;
   const instant = new Date(now);

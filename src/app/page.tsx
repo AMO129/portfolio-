@@ -2,6 +2,7 @@ import { ContactPanel } from "@/components/contact-panel";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
+import { FloatingNavigation } from "@/components/floating-navigation";
 import { ProjectsGrid } from "@/components/projects-grid";
 import { ScrollEffects } from "@/components/scroll-effects";
 import { SectionLabel } from "@/components/section-label";
@@ -25,8 +26,8 @@ export default async function Home() {
           <h2 className="mt-6 max-w-sm text-4xl font-medium leading-tight tracking-[-0.055em] sm:text-5xl">Built for systems that matter.</h2>
         </div>
         <div className="reveal-up max-w-3xl md:pt-12">
-          <p className="text-xl leading-9 text-[#b4b9b2] sm:text-2xl sm:leading-10">I am Moses Owalama Abraham, a Software Engineer and Mastercard Foundation Scholar at Pan-Atlantic University, dedicated to bridging high-performance systems with precision UI/UX design.</p>
-          <p className="mt-6 max-w-2xl text-base leading-8 text-[#777f78]">My work spans AI-driven autonomous border monitoring to scalable micro-treasury ledgers—building secure, resilient infrastructure using Python, Next.js, and Supabase. I care about code that executes with military-grade efficiency and interfaces that make complex systems feel clear.</p>
+          <p className="text-xl leading-9 text-[#b4b9b2] sm:text-2xl sm:leading-10">I’m Moses Owalama Abraham, a Software Engineering student at Pan-Atlantic University. I build practical web, desktop, and AI products with a focus on dependable engineering, thoughtful security, and clear interfaces.</p>
+          <p className="mt-6 max-w-2xl text-base leading-8 text-[#777f78]">My work spans computer-vision prototypes, machine-learning tools, cloud-connected desktop software, and transparent funding systems. Using Python, Next.js, and Supabase where they fit, I aim to build secure, resilient infrastructure with efficient code and interfaces that make complex systems feel clear.</p>
           <div className="mt-10 grid grid-cols-2 gap-px border border-white/10 bg-white/10 sm:grid-cols-3">
             {[["01", "Systems thinking"], ["02", "Applied AI"], ["03", "Product design"]].map(([number, label]) => <div key={number} className="bg-[#111412] px-4 py-5"><span className="font-mono text-xs text-[#8cba85]">{number}</span><p className="mt-3 text-sm text-[#c7cbc5]">{label}</p></div>)}
           </div>
@@ -49,6 +50,7 @@ export default async function Home() {
       </section>
 
       <Footer />
+      <FloatingNavigation />
       <ScrollEffects />
     </main>
   );
