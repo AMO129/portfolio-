@@ -25,7 +25,30 @@ export async function PUT(request: NextRequest) {
   const tagline = body.tagline.trim();
   const summary = body.summary.trim();
   if (!tagline || tagline.length > 120 || !summary || summary.length > 1800) return NextResponse.json({ error: "Keep the tagline under 120 characters and the summary under 1,800." }, { status: 400 });
-  const { data, error } = await supabase.from("portfolio_profile").update({ tagline, summary, updated_at: new Date().toISOString() }).eq("id", true).select("tagline,summary").single();
+  const optionalUrl = (value: unknown, hosts: string[]) => {
+    if (value === null || value === "") return { value: null, valid: true };
+    if (typeof value !== "string" || value.length > 320) return { value: null, valid: false };
+    try {
+      const url = new URL(value);
+      if (url.protocol !== "https:" || !hosts.includes(url.hostname.toLowerCase())) return { value: null, valid: false };
+      url.search = "";
+      url.hash = "";
+      return { value: url.toString().replace(/\/$/, ""), valid: true };
+    } catch { return { value: null, valid: false }; }
+  };
+  const github = optionalUrl(body.github_url, ["github.com", "www.github.com"]);
+  const linkedin = optionalUrl(body.linkedin_url, ["linkedin.com", "www.linkedin.com"]);
+  const avatarUrl = body.avatar_url;
+  const avatarValid = avatarUrl === null || avatarUrl === "/profile.jpg" || (typeof avatarUrl === "string" && avatarUrl.startsWith(`${url.replace(/\/$/, "")}/storage/v1/object/public/portfolio-media/profile/`));
+  if (!github.valid || !linkedin.valid || !avatarValid) return NextResponse.json({ error: "Use valid GitHub and LinkedIn profile links and an image uploaded to portfolio storage." }, { status: 400 });
+  const { data, error } = await supabase.from("portfolio_profile").update({
+    tagline,
+    summary,
+    avatar_url: avatarUrl,
+    github_url: github.value,
+    linkedin_url: linkedin.value,
+    updated_at: new Date().toISOString(),
+  }).eq("id", true).select("tagline,summary,avatar_url,github_url,linkedin_url").single();
   if (error) return NextResponse.json({ error: "The profile was not published. Check the portfolio profile table and RLS policy." }, { status: 403 });
   return NextResponse.json({ profile: data });
 }

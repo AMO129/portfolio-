@@ -6,10 +6,11 @@ export type Project = {
   tech_stack: string;
   description: string;
   project_url: string | null;
+  preview_image_url: string | null;
   created_at?: string;
 };
 
-const select = "id,title,status,role,tech_stack,description,project_url,created_at";
+const select = "id,title,status,role,tech_stack,description,project_url,preview_image_url,created_at";
 
 export async function getProjects(): Promise<Project[]> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");

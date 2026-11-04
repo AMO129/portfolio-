@@ -29,15 +29,15 @@ export function FloatingNavigation() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 18 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className="fixed bottom-4 left-1/2 z-40 flex max-w-[calc(100vw-1rem)] -translate-x-1/2 items-center gap-1 overflow-x-auto border border-white/10 bg-[#101311]/90 p-1.5 shadow-[0_12px_48px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:gap-2 sm:p-2"
+          className="fixed bottom-4 left-1/2 z-40 flex max-w-[calc(100vw-1rem)] -translate-x-1/2 items-center gap-1 overflow-x-auto border border-[color:var(--line)] bg-[var(--surface-raised)]/95 p-1.5 shadow-[0_12px_48px_var(--shade)] backdrop-blur-xl sm:gap-2 sm:p-2"
         >
           {links.map(({ label, href, icon: Icon }) => (
             <motion.a
               key={href}
               href={href}
-              whileHover={{ y: -2, color: "#c0dfb8", backgroundColor: "rgba(140,186,133,0.10)" }}
+              whileHover={{ y: -2, color: "var(--accent-hover)", backgroundColor: "var(--surface-inset)" }}
               whileTap={{ scale: 0.96 }}
-              className="inline-flex min-h-10 shrink-0 items-center gap-2 px-2 font-mono text-[9px] uppercase tracking-[0.12em] text-[#aab2a9] focus-visible:outline focus-visible:outline-1 focus-visible:outline-[#8cba85] sm:px-4"
+              className="inline-flex min-h-10 shrink-0 items-center gap-2 px-2 font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--body)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-[color:var(--accent)] sm:px-4"
             >
               <Icon size={13} aria-hidden="true" />
               <span>{label}</span>
