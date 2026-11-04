@@ -2,13 +2,22 @@
 
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Eye, X } from "lucide-react";
+import { ArrowUpRight, ChevronDown, Eye, X } from "lucide-react";
 import { useState } from "react";
 import type { Project } from "@/lib/projects";
 
 const designPreviews: Record<string, string> = {
   RrCJrQEOTPwJaHaGPkOUYN: "/projects/mindcare-dashboard.png",
   K22SYRAsq47dNw7NFwWUdA: "/projects/snakevault-dashboard.png",
+};
+
+const originStories: Record<string, string> = {
+  "Worship Audio Room": "Conceived during a discipleship meeting when the leader struggled to play a background song. Engineered to integrate a native audio console directly into a WebRTC room.",
+  Chronos: "Born from a personal need for an automated, high-performance daily scheduler to optimize timing, routines, and resource allocation.",
+  "Salary Predictor ML": "Developed during a Machine Learning Engineering bootcamp by TechCrush as a practical application of regression modeling.",
+  "UGDF AI Surveillance": "A foundational prototype for a broader vision: a centralized, AI-driven security and early-warning framework designed to promote global peace.",
+  SnakeVault: "Collaborative academic projects built with peers. MindCare explored psychological UI/UX, while SnakeVault tackled local desktop encryption.",
+  MindCare: "Collaborative academic projects built with peers. MindCare explored psychological UI/UX, while SnakeVault tackled local desktop encryption.",
 };
 
 function isSafeProjectUrl(value: string | null): value is string {
@@ -26,6 +35,7 @@ function projectDesignPreview(value: string | null) {
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [storyOpen, setStoryOpen] = useState(false);
   const previewImage = projectDesignPreview(project.project_url);
   const safeUrl = isSafeProjectUrl(project.project_url) ? project.project_url : null;
   const isFigmaLink = safeUrl ? new URL(safeUrl).hostname.includes("figma.com") : false;
@@ -35,8 +45,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     <motion.article
       whileHover={{ y: -3 }}
       transition={{ duration: 0.2 }}
-      onHoverStart={() => setPreviewOpen(true)}
-      onHoverEnd={() => setPreviewOpen(false)}
       className="reveal-up group relative flex min-h-[310px] flex-col overflow-hidden bg-[#111412] p-6 sm:p-7"
     >
       <div className="flex items-start justify-between gap-4">
@@ -52,6 +60,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         <h3 className="mt-2 text-2xl font-medium tracking-[-0.04em] text-[#e5e9e2]">{project.title}</h3>
         <p className="mt-4 text-sm leading-7 text-[#8e968e]">{project.description}</p>
       </div>
+
+      {originStories[project.title] && <div className="mt-4 border-y border-white/[0.07] py-3">
+        <button type="button" aria-expanded={storyOpen} onClick={() => setStoryOpen((open) => !open)} className="flex w-full items-center justify-between gap-3 text-left font-mono text-[9px] uppercase tracking-[0.15em] text-[#9fa89e] transition-colors hover:text-[#c0dfb8]"><span>Origin story</span><motion.span animate={{ rotate: storyOpen ? 180 : 0 }}><ChevronDown size={14} /></motion.span></button>
+        <AnimatePresence initial={false}>{storyOpen && <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.24, ease: "easeInOut" }} className="overflow-hidden"><p className="pt-3 text-xs leading-6 text-[#90988f]">{originStories[project.title]}</p></motion.div>}</AnimatePresence>
+      </div>}
 
       <div className="mt-auto pt-8">
         <div className="flex flex-wrap gap-2">

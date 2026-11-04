@@ -1,13 +1,14 @@
 "use client";
 
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { ArrowUp, BriefcaseBusiness, Mail, UserRound } from "lucide-react";
+import { ArrowUp, BriefcaseBusiness, Mail, UserRound, Radar } from "lucide-react";
 import { useState } from "react";
 
 const links = [
   { label: "Top", href: "#top", icon: ArrowUp },
   { label: "Profile", href: "#about", icon: UserRound },
   { label: "Work", href: "#work", icon: BriefcaseBusiness },
+  { label: "Experience", href: "#experience", icon: Radar },
   { label: "Contact", href: "#contact", icon: Mail },
 ];
 

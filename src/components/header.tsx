@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
-const links = [["Profile", "#about"], ["Operations", "#work"], ["Contact", "#contact"]];
+const links = [["Profile", "#about"], ["Operations", "#work"], ["Experience", "#experience"], ["Contact", "#contact"]];
 
 export function Header() {
   const [open, setOpen] = useState(false);

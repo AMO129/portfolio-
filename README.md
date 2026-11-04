@@ -24,6 +24,10 @@ The public read expects `public.projects` with `id`, `created_at`, `title`, `sta
 
 The CV/profile migration additionally restricts profile and private file operations to `moses.abraham@pau.edu.ng`.
 
+The public page also reads `public.experiences` (`id`, `role`, `organization`, `details`, `created_at`) as a static, read-only timeline with 30-minute revalidation. The admin console manages these records through authenticated requests; the experiences migration grants public read access and restricts writes to `moses.abraham@pau.edu.ng`.
+
+The entry gate expects an optional local sound file at `public/bg-audio.mp3`. Add your chosen audio asset there to enable background playback; the silent entry mode remains available.
+
 ## Styling and motion
 
 Tailwind utility classes are used directly in JSX. `src/app/globals.css` contains only Tailwind's framework import. Framer Motion handles UI transitions and the cursor pulse; GSAP is limited to scroll-triggered reveal motion; React Three Fiber renders the Saturn and drone hero scene.

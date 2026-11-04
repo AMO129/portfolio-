@@ -8,15 +8,18 @@ import { ScrollEffects } from "@/components/scroll-effects";
 import { SectionLabel } from "@/components/section-label";
 import { getProjects } from "@/lib/projects";
 import { getPortfolioProfile } from "@/lib/portfolio-profile";
+import { getExperiences } from "@/lib/experiences";
+import { ExperienceTimeline } from "@/components/experience-timeline";
+import { AudioEntryGate } from "@/components/audio-entry-gate";
 
 export const dynamic = "force-static";
 export const revalidate = 1800;
 
 export default async function Home() {
-  const [projects, profile] = await Promise.all([getProjects(), getPortfolioProfile()]);
+  const [projects, profile, experiences] = await Promise.all([getProjects(), getPortfolioProfile(), getExperiences()]);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#0f0f0f] text-[#f2f3ee]">
+    <AudioEntryGate><main className="relative min-h-screen overflow-hidden bg-[#0f0f0f] text-[#f2f3ee]">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_72%_10%,rgba(104,153,104,0.11),transparent_40%),linear-gradient(180deg,transparent_0%,rgba(7,9,8,0.55)_100%)]" />
       <Header />
       <Hero tagline={profile.tagline} />
@@ -44,15 +47,17 @@ export default async function Home() {
         </div>
       </section>
 
+      <ExperienceTimeline experiences={experiences} />
+
       <section id="contact" className="relative mx-auto max-w-7xl scroll-mt-24 px-6 py-24 md:px-10 lg:px-14">
-        <SectionLabel index="03" label="Secure channel" />
+        <SectionLabel index="04" label="Secure channel" />
         <ContactPanel />
       </section>
 
       <Footer />
       <FloatingNavigation />
       <ScrollEffects />
-    </main>
+    </main></AudioEntryGate>
   );
 }
 

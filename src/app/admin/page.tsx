@@ -4,6 +4,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Project } from "@/lib/projects";
 import { defaultPortfolioProfile } from "@/lib/portfolio-profile";
 import type { PortfolioProfile } from "@/lib/portfolio-profile";
+import type { Experience } from "@/lib/experiences";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,8 @@ export default async function AdminPage() {
   if (!user) redirect("/admin/login");
   const { data, error } = await supabase.from("projects").select("id,title,status,role,tech_stack,description,project_url,created_at").order("created_at", { ascending: false });
   const { data: profileData } = await supabase.from("portfolio_profile").select("tagline,summary").eq("id", true).maybeSingle();
+  const { data: experienceData } = await supabase.from("experiences").select("id,role,organization,details,created_at").order("created_at", { ascending: false });
   const profile = (profileData ?? defaultPortfolioProfile) as PortfolioProfile;
-  return <AdminDashboard email={user.email ?? "Authenticated operator"} initialProjects={(error ? [] : data ?? []) as Project[]} initialProfile={profile} loadError={error?.message} />;
+  return <AdminDashboard email={user.email ?? "Authenticated operator"} initialProjects={(error ? [] : data ?? []) as Project[]} initialProfile={profile} initialExperiences={(experienceData ?? []) as Experience[]} loadError={error?.message} />;
 }
 
