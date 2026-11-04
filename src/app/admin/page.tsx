@@ -5,6 +5,7 @@ import type { Project } from "@/lib/projects";
 import { defaultPortfolioProfile } from "@/lib/portfolio-profile";
 import type { PortfolioProfile } from "@/lib/portfolio-profile";
 import type { Experience } from "@/lib/experiences";
+import type { PortfolioAudioTrack } from "@/lib/portfolio-audio";
 
 export const dynamic = "force-dynamic";
 
@@ -17,10 +18,11 @@ export default async function AdminPage() {
   }
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/admin/login");
-  const { data, error } = await supabase.from("projects").select("id,title,status,role,tech_stack,description,project_url,created_at").order("created_at", { ascending: false });
-  const { data: profileData } = await supabase.from("portfolio_profile").select("tagline,summary").eq("id", true).maybeSingle();
+  const { data, error } = await supabase.from("projects").select("id,title,status,role,tech_stack,description,project_url,preview_image_url,created_at").order("created_at", { ascending: false });
+  const { data: profileData } = await supabase.from("portfolio_profile").select("tagline,summary,avatar_url,github_url,linkedin_url").eq("id", true).maybeSingle();
   const { data: experienceData } = await supabase.from("experiences").select("id,role,organization,details,created_at").order("created_at", { ascending: false });
+  const { data: audioData } = await supabase.from("portfolio_audio_tracks").select("id,title,storage_path,is_active,created_at").order("created_at", { ascending: false });
   const profile = (profileData ?? defaultPortfolioProfile) as PortfolioProfile;
-  return <AdminDashboard email={user.email ?? "Authenticated operator"} initialProjects={(error ? [] : data ?? []) as Project[]} initialProfile={profile} initialExperiences={(experienceData ?? []) as Experience[]} loadError={error?.message} />;
+  return <AdminDashboard email={user.email ?? "Authenticated operator"} initialProjects={(error ? [] : data ?? []) as Project[]} initialProfile={profile} initialExperiences={(experienceData ?? []) as Experience[]} initialAudioTracks={(audioData ?? []) as PortfolioAudioTrack[]} loadError={error?.message} />;
 }
 

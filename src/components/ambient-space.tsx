@@ -2,10 +2,15 @@
 
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useThemePreference } from "@/components/theme-provider";
 
 export function AmbientSpaceBackdrop() {
+  const { resolvedTheme } = useThemePreference();
+  const starfield = resolvedTheme === "light"
+    ? "bg-[radial-gradient(ellipse_at_78%_8%,rgba(135,93,47,0.045),transparent_31%),radial-gradient(ellipse_at_16%_76%,rgba(56,107,66,0.04),transparent_34%),radial-gradient(circle,rgba(35,54,38,0.15)_0.7px,transparent_1px)]"
+    : "bg-[radial-gradient(ellipse_at_78%_8%,rgba(194,149,101,0.055),transparent_31%),radial-gradient(ellipse_at_16%_76%,rgba(104,153,104,0.055),transparent_34%),radial-gradient(circle,rgba(202,213,193,0.24)_0.7px,transparent_1px)]";
   return <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_78%_8%,rgba(194,149,101,0.055),transparent_31%),radial-gradient(ellipse_at_16%_76%,rgba(104,153,104,0.055),transparent_34%),radial-gradient(circle,rgba(202,213,193,0.24)_0.7px,transparent_1px)] bg-[size:auto,auto,83px_83px] opacity-70" />
+    <div className={`absolute inset-0 ${starfield} bg-[size:auto,auto,83px_83px] opacity-70`} />
     <motion.div animate={{ y: [0, 18, 0], x: [0, 7, 0] }} transition={{ duration: 19, repeat: Infinity, ease: "easeInOut" }} className="absolute left-[11vw] top-[37vh] size-14 rounded-full border border-[#c59a63]/20 bg-[radial-gradient(circle_at_34%_32%,rgba(220,175,120,0.3),rgba(115,80,58,0.12)_50%,rgba(0,0,0,0)_74%)] opacity-40 shadow-[0_0_46px_rgba(196,146,94,0.08)] sm:size-20" />
     <motion.div animate={{ y: [0, -14, 0], rotate: [0, 5, 0] }} transition={{ duration: 23, repeat: Infinity, ease: "easeInOut" }} className="absolute right-[7vw] top-[61vh] size-7 rounded-full border border-[#8cba85]/20 bg-[radial-gradient(circle_at_35%_30%,rgba(176,204,158,0.34),rgba(62,86,65,0.12)_58%,transparent_76%)] opacity-45 shadow-[0_0_32px_rgba(140,186,133,0.09)] sm:size-10">
       <span className="absolute -inset-x-2 top-1/2 h-2 -translate-y-1/2 rotate-[-24deg] rounded-[50%] border border-[#b5a17d]/25" />

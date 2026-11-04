@@ -25,12 +25,20 @@ function validProject(input: Record<string, unknown>) {
     typeof input.project_url === "string" && URL.canParse(input.project_url) &&
     ["https:", "http:"].includes(new URL(input.project_url).protocol)
   );
+  const mediaBase = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
+  const previewUrlIsValid = input.preview_image_url === undefined || input.preview_image_url === null || input.preview_image_url === "" || (
+    typeof input.preview_image_url === "string" && (
+      input.preview_image_url === "/projects/mindcare-dashboard.png" || input.preview_image_url === "/projects/snakevault-dashboard.png" ||
+      Boolean(mediaBase && input.preview_image_url.startsWith(`${mediaBase}/storage/v1/object/public/portfolio-media/projects/`))
+    )
+  );
   return typeof input.title === "string" && input.title.trim().length > 0
     && ["Live", "In Development"].includes(String(input.status))
     && typeof input.role === "string" && input.role.trim().length > 0
     && typeof input.tech_stack === "string" && input.tech_stack.trim().length > 0
     && typeof input.description === "string" && input.description.trim().length > 0
-    && projectUrlIsValid;
+    && projectUrlIsValid
+    && previewUrlIsValid;
 }
 
 export async function POST(request: NextRequest) {
@@ -38,7 +46,7 @@ export async function POST(request: NextRequest) {
   if ("error" in access) return NextResponse.json({ error: access.error }, { status: access.status });
   const body = await request.json().catch(() => null);
   if (!body || !validProject(body)) return NextResponse.json({ error: "Project fields are invalid." }, { status: 400 });
-  const { data, error } = await access.supabase.from("projects").insert({ title: body.title.trim(), status: body.status, role: body.role.trim(), tech_stack: body.tech_stack.trim(), description: body.description.trim(), project_url: body.project_url || null }).select("id,title,status,role,tech_stack,description,project_url,created_at").single();
+  const { data, error } = await access.supabase.from("projects").insert({ title: body.title.trim(), status: body.status, role: body.role.trim(), tech_stack: body.tech_stack.trim(), description: body.description.trim(), project_url: body.project_url || null, preview_image_url: body.preview_image_url || null }).select("id,title,status,role,tech_stack,description,project_url,preview_image_url,created_at").single();
   if (error) return NextResponse.json({ error: error.message }, { status: 403 });
   return NextResponse.json({ project: data }, { status: 201 });
 }
@@ -48,7 +56,7 @@ export async function PUT(request: NextRequest) {
   if ("error" in access) return NextResponse.json({ error: access.error }, { status: access.status });
   const body = await request.json().catch(() => null);
   if (!body || typeof body.id !== "string" || !validProject(body)) return NextResponse.json({ error: "Project fields are invalid." }, { status: 400 });
-  const { data, error } = await access.supabase.from("projects").update({ title: body.title.trim(), status: body.status, role: body.role.trim(), tech_stack: body.tech_stack.trim(), description: body.description.trim(), project_url: body.project_url || null }).eq("id", body.id).select("id,title,status,role,tech_stack,description,project_url,created_at").single();
+  const { data, error } = await access.supabase.from("projects").update({ title: body.title.trim(), status: body.status, role: body.role.trim(), tech_stack: body.tech_stack.trim(), description: body.description.trim(), project_url: body.project_url || null, preview_image_url: body.preview_image_url || null }).eq("id", body.id).select("id,title,status,role,tech_stack,description,project_url,preview_image_url,created_at").single();
   if (error) return NextResponse.json({ error: error.message }, { status: 403 });
   return NextResponse.json({ project: data });
 }
